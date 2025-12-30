@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.SqlServer.Server;
 using Newtonsoft;
 using Newtonsoft.Json;
 
@@ -33,8 +34,23 @@ namespace httprequest_api
             // 1st try failed. why ? Because i cant read of course.
             // 7th try the charm. After some research, you have to wrap the json data in a string content. After that, you must prepare
             // the header with the encode type and media type. I chose UTF8 and application/json (still don't really know what they mean)
-            string message = "Je suis un client et j'essais de communiquer avec le server";
-            HttpContent ServerAnsw = await PostRequest(BaseUrl, message);
+            //string message = "Je suis un client et j'essais de communiquer avec le server";
+            //HttpContent ServerAnsw = await PostRequest(BaseUrl, message);
+
+
+            // Brand new day brand new me. Today we're working on the interface and data format.
+            // Let's ask our user what he want to do with our GUI and decide what to do with a switch case 
+            int choice = Interface();
+
+            switch (choice)
+            {
+                case 1:
+                    // if he want to sign up, we display the sign up page and get his informations
+                    break;
+
+                case 2:
+                    break;
+            }
 
             Console.ReadLine();
         }
@@ -43,7 +59,7 @@ namespace httprequest_api
         /// Does a GET request to the API and return the data as a string 
         /// </summary>
         /// <param name="url">target url of the API</param>
-        /// <returns></returns>
+        /// <returns>the data from the api</returns>
         static async Task<string> GetRequest(string url)
         {
             string respond = await client.GetStringAsync(url);
@@ -83,6 +99,34 @@ namespace httprequest_api
             return Response.Content;
         }
 
+        /// <summary>
+        /// Display a multi choice interface and return the int choice
+        /// </summary>
+        /// <returns>number of the selected option</returns>
+        static int Interface()
+        {
+            Console.WriteLine("1- Sign Up \n2- Log In");
+            Console.Write("Option: ");
+            return int.Parse(Console.ReadLine());
+        }
+
+        /// <summary>
+        /// Load the sign up page and get the user's informations to format it in a dictionary
+        /// </summary>
+        /// <returns> A dictionary with the user's informations</returns>
+        static Dictionary<string, string> SignUpPage()
+        {
+            Console.Clear();
+            Console.WriteLine("==========Sign Up page==========\n");
+            Console.Write("mail: ");
+            string usermail = Console.ReadLine();
+            Console.Write("Password: ");
+            string password = Console.ReadLine();
+            Dictionary<string, string> information = new Dictionary<string, string>();
+            information.Add(password, usermail);
+            return information;
+        }
+
         // Look under for more thought 
     }
 }
@@ -100,3 +144,7 @@ namespace httprequest_api
 // With those two method and an api we can begin to code the authentification with API system.
 // Prelude : The API (done)
 // Chapter 1: The interface (begin)... (2025-12-19)
+
+// 3-
+//We can begin the multi choice interface to log in and sign up
+// we'll no extra because we're on a console.

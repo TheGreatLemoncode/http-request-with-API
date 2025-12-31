@@ -38,10 +38,19 @@ def api_index():
 def api_creation():
     """Route whose role will be to verify user information"""
     data = request.get_json(silent=True)
+    
     if not data:
         return jsonify("The data did not arrive"), 400
-    print(data.get('password'))
-    print(data.get('mail'))
+    
+    # print(data.get('password'))
+    # print(data.get('mail'))
+    with open('users.data', 'r') as f:
+        line = f.readline()
+        exist = False
+        while line is not None:
+            if data.get('mail') in line and data.get('password') in line:
+                exist = True 
+
     return jsonify('The data did arrive at the API'), 200
 
 if __name__ == '__main__':
